@@ -147,6 +147,12 @@ AquaponicsEdgeSimulator/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml               # Automated GitHub Actions (Tests + Firmware Build)
+├── deploy/                      # Local telemetry ingestion & visualization stack
+│   ├── grafana/
+│   │   ├── dashboards/          # Pre-built aquaponics telemetry dashboard
+│   │   └── provisioning/        # Automatic datasource and dashboard provisioning
+│   ├── mosquitto/               # Eclipse Mosquitto MQTT broker configuration
+│   └── telegraf/                # MQTT to InfluxDB metrics consumer configuration
 ├── main/
 │   ├── include/
 │   │   ├── mqtt_client_service.h# MQTT client lifecycle & topic manager
@@ -161,10 +167,13 @@ AquaponicsEdgeSimulator/
 │   ├── simulator.c              # Bounded stochastic physical simulation
 │   ├── telemetry.c              # Telemetry formatting & JSON builder
 │   └── wifi_manager.c           # Wi-Fi event handler and reconnection state
+├── scripts/
+│   └── mock_publisher.py       # Standalone Python simulator for hardware-free demos
 ├── tests/
 │   ├── CMakeLists.txt           # Host test build configuration
 │   └── test_aquaponics_simulator.c # Host unit test suite (CTest / GCC)
 ├── CMakeLists.txt               # Root project CMake file
+├── docker-compose.yml           # One-click Mosquitto + InfluxDB + Telegraf + Grafana
 ├── LICENSE                      # Apache-2.0 open-source license
 ├── NOTICE                       # Attribution and third-party notices
 ├── README.md                    # Project documentation
@@ -244,6 +253,43 @@ I (1870) mqtt_service: MQTT client service started. Broker: mqtt://192.168.1.100
 I (1880) aquaponics_main: Telemetry task started. Target interval: 10 s, Device: esp32-sim-01
 I (2120) mqtt_service: Connected to MQTT broker: mqtt://192.168.1.100:1883
 I (2130) aquaponics_main: Telemetry [NORMAL]: pH=6.81, Temp=23.52 C, EC=1.50 mS/cm, DO=7.19 mg/L
+```
+
+---
+
+## End-to-End Local Demonstration
+
+You can launch the full ingestion and telemetry visualization infrastructure (**Mosquitto MQTT Broker + InfluxDB + Telegraf + Grafana**) with a single command:
+
+```bash
+docker compose up -d
+```
+
+### Accessing the Dashboard
+
+Open your browser at **`http://localhost:3001`**:
+* **Datasource**: Pre-configured InfluxDB (`aquaponics` database).
+* **Dashboard**: Pre-provisioned **"Aquaponics Edge Telemetry"** dashboard with live gauges and historical timeseries charts for water pH, temperature, EC, and dissolved oxygen.
+
+### Hardware-Free Testing (Mock Edge Publisher)
+
+If you do not have a physical ESP32 connected right now, you can stream simulated edge data directly into the broker using either:
+
+```bash
+# Option 1: Start the containerized mock edge publisher
+docker compose --profile mock up -d
+
+# Option 2: Run the standalone Python script locally
+pip install paho-mqtt
+python scripts/mock_publisher.py --mode NORMAL --interval 3
+```
+
+To test failure scenarios in Grafana (e.g. thermal spike or hypoxia):
+
+```bash
+python scripts/mock_publisher.py --mode HIGH_TEMPERATURE
+# or
+python scripts/mock_publisher.py --mode LOW_DISSOLVED_OXYGEN
 ```
 
 ---
