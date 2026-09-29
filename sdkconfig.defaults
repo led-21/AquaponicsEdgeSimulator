@@ -1,0 +1,21 @@
+# ESP-IDF Target Architecture
+CONFIG_IDF_TARGET="esp32"
+
+# FreeRTOS Configuration
+CONFIG_FREERTOS_HZ=1000
+
+# Aquaponics Edge Simulator Configuration
+CONFIG_SIMULATOR_DEVICE_ID="esp32-sim-01"
+CONFIG_SIMULATOR_TELEMETRY_INTERVAL_SEC=10
+CONFIG_SIMULATOR_MODE_NORMAL=y
+CONFIG_SIMULATOR_SEED=42
+
+# Wi-Fi Credentials (Placeholders - customize via menuconfig or local sdkconfig)
+CONFIG_ESP_WIFI_SSID="YOUR_WIFI_SSID"
+CONFIG_ESP_WIFI_PASSWORD="YOUR_WIFI_PASSWORD"
+CONFIG_ESP_MAXIMUM_RETRY=5
+
+# MQTT Configuration (Placeholders - customize via menuconfig or local sdkconfig)
+CONFIG_MQTT_BROKER_URI="mqtt://192.168.1.100:1883"
+CONFIG_MQTT_USERNAME=""
+CONFIG_MQTT_PASSWORD=""

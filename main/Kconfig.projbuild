@@ -1,0 +1,84 @@
+menu "Aquaponics Edge Simulator Configuration"
+
+    menu "Wi-Fi Configuration"
+        config ESP_WIFI_SSID
+            string "Wi-Fi SSID"
+            default "YOUR_WIFI_SSID"
+            help
+                SSID of the Wi-Fi Access Point to connect to.
+
+        config ESP_WIFI_PASSWORD
+            string "Wi-Fi Password"
+            default "YOUR_WIFI_PASSWORD"
+            help
+                Password of the Wi-Fi Access Point.
+
+        config ESP_MAXIMUM_RETRY
+            int "Maximum Connection Retry Count"
+            default 5
+            range 1 50
+            help
+                Maximum number of attempts to reconnect to Wi-Fi before failing.
+    endmenu
+
+    menu "MQTT Configuration"
+        config MQTT_BROKER_URI
+            string "MQTT Broker URI"
+            default "mqtt://192.168.1.100:1883"
+            help
+                URI of the target MQTT broker (e.g. mqtt://192.168.1.100:1883 or mqtts://broker.example.com:8883).
+
+        config MQTT_USERNAME
+            string "MQTT Username"
+            default ""
+            help
+                Optional MQTT client username. Leave blank if not required.
+
+        config MQTT_PASSWORD
+            string "MQTT Password"
+            default ""
+            help
+                Optional MQTT client password. Leave blank if not required.
+    endmenu
+
+    menu "Telemetry & Simulation Settings"
+        config SIMULATOR_DEVICE_ID
+            string "Device ID"
+            default "esp32-sim-01"
+            help
+                Unique identifier for this edge device published in telemetry and topics.
+
+        config SIMULATOR_TELEMETRY_INTERVAL_SEC
+            int "Telemetry Interval (seconds)"
+            default 10
+            range 1 3600
+            help
+                Interval in seconds between telemetry publications.
+
+        choice SIMULATOR_MODE
+            prompt "Simulation Scenario Mode"
+            default SIMULATOR_MODE_NORMAL
+            help
+                Operational simulation scenario for aquaponics water parameters.
+
+            config SIMULATOR_MODE_NORMAL
+                bool "NORMAL: Stable system with natural minor fluctuations"
+
+            config SIMULATOR_MODE_PH_DRIFT
+                bool "PH_DRIFT: Progressive acidification / biological drift"
+
+            config SIMULATOR_MODE_HIGH_TEMP
+                bool "HIGH_TEMPERATURE: Thermal stress / cooling failure"
+
+            config SIMULATOR_MODE_LOW_DO
+                bool "LOW_DISSOLVED_OXYGEN: Aeration failure / hypoxia condition"
+        endchoice
+
+        config SIMULATOR_SEED
+            int "Simulation Random Seed (0 for runtime tick seed)"
+            default 42
+            help
+                Seed for the pseudo-random generator. Use a non-zero value for deterministic simulation.
+    endmenu
+
+endmenu

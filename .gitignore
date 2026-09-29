@@ -1,0 +1,65 @@
+# Build and output directories
+build/
+bin/
+dist/
+out/
+
+# ESP-IDF build artifacts, component manager caches and generated configs
+sdkconfig
+sdkconfig.old
+sdkconfig.ci
+sdkconfig.*.old
+dependencies.lock
+managed_components/
+.cache/
+.espressif/
+
+# C/C++ compiler and tooling artifacts
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.elf
+*.bin
+*.map
+*.hex
+*.d
+
+# Python / Pytest cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+
+# Local editor and IDE configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.clangd/
+compile_commands.json
+
+# Environment, secrets, certificates and private keys
+*.env
+*.env.*
+*.secret
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*~

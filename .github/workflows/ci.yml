@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  host-tests:
+    name: Host Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential libcjson-dev
+
+      - name: Build and run host unit tests
+        run: |
+          mkdir -p tests/build
+          cd tests/build
+          cmake ..
+          cmake --build .
+          ctest --output-on-failure
+
+  build-esp32:
+    name: ESP32 Firmware Build
+    runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build firmware
+        run: |
+          . /opt/esp/idf/export.sh
+          idf.py build

@@ -1,0 +1,10 @@
+idf_component_register(
+    SRCS
+        "app_main.c"
+        "simulator.c"
+        "telemetry.c"
+        "wifi_manager.c"
+        "mqtt_client_service.c"
+    INCLUDE_DIRS
+        "include"
+)
